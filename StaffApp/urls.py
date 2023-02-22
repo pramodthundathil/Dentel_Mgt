@@ -9,6 +9,8 @@ urlpatterns = [
     path("UpdateProfile/<str:pk>,<str:sk>",views.UpdateProfile,name="UpdateProfile"),
     path("PatientList",views.PatientList,name="PatientList"),
     path("DeleteProfile,<str:pk>",views.DeleteProfile,name="DeleteProfile"),
-    path("DoctorView",views.DoctorView,name="DoctorView")
+    path("DoctorView",views.DoctorView,name="DoctorView"),
+    path("BillView",views.BillView,name="BillView"),
+    path("AddBill/<str:pk>",views.AddBill,name="AddBill")
     
 ]

@@ -6,6 +6,7 @@ from Bookings.models import Booking
 from Patient.models import PatientProfile,TreatmetHistory
 from Doctor.models import DoctorList
 from django.http import HttpResponse
+from .models import Bills
 
 # Create your views here.
 def AddStaff(request):
@@ -120,3 +121,30 @@ def DoctorView(request):
         "doctor":doctor
     }
     return render(request,"staff/doctorview.html",context)
+
+
+def BillView(request):
+    group = None
+    if request.user.groups.all().exists():
+        group = request.user.groups.all()[0].name
+        
+    if group == "staff":
+        context = {
+            "bill":Bills.objects.all()
+            }
+        return render(request,"staff/bills.html",context)
+    else:
+        context = {
+            "bill":Bills.objects.filter(user = request.user)
+        }
+        return render(request,"bills.html",context)
+        
+
+def AddBill(request,pk):
+    if request.method == "POST":
+        book = Booking.objects.get(id = pk)
+        amt = request.POST['amt']
+        bill = Bills.objects.create(Billamount = amt, user = book.user)
+        bill.save()
+        messages.info(request,"Bill Added")
+    return redirect("BookingView", pk=pk)
